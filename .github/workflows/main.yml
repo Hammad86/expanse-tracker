@@ -1,0 +1,33 @@
+name: bootcamp expanse-tracker
+
+on:
+  push:
+    branches: [ master ]
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:    
+    - uses: actions/checkout@v2
+    - name: installing nodejs
+      uses: actions/setup-node@v2-beta
+      with:
+        version: 12
+      
+    - name: github action for yarn     
+      uses: Borales/actions-yarn@v2.3.0
+      with:
+    # Yarn command
+        cmd: install 
+
+    - name: creating build
+      run: sudo yarn build   
+
+    - name: installing surge
+      run: npm install -g surge
+       
+    - name: deploying on surge
+      run: surge ./build expanse-tracker-by-hammad.surge.sh/ --token ${{secrets.SURGE_TOKEN}}
+     
